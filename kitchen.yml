@@ -32,12 +32,15 @@ provisioner:
   state_top:
     base:
       "*":
-        - testing
+        - testing.download
   pillars:
+    test.sls:
+      testing:
+        download_url: 'https://github.com/borgbackup/borg/releases/download/1.1.7/borg-linux64'
     top.sls:
       base:
         "*":
-          - testing
+          - test
 
   grains:
     noservices: False
