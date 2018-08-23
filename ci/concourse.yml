@@ -1,0 +1,59 @@
+resource_types:
+- name: email
+  type: docker-image
+  source:
+    repository: pcfseceng/email-resource
+
+- name: git-workflow
+  type: docker-image
+  source:
+    repository: docker.ci.local/concourse/resource/git-workflow
+    tag: v1
+
+- name: salt-pepper
+  type: docker-image
+  source:
+    repository: docker.ci.local/concourse/resource/salt-pepper
+    tag: v1
+
+resources:
+- name: r-salt-formulas-testing-dev
+  type: git-workflow
+  webhook_token: ((webhook_token))
+  check_every: 168h
+  source:
+    uri: git@git.ci.local:salt/formulas/testing-formula
+    branch: dev
+    private_key: ((r-git-ssh.private_key))
+
+- name: send-email
+  type: email
+  source:
+    smtp:
+      host: smtp.ci.local
+      port: "587" # this must be a string
+      username: ((r-email.username))
+      password: ((r-email.password))
+    from: concourse-build@ci.local
+    to: 
+      - build@ci.local
+
+jobs:
+- name: j-merge-ff
+  plan:
+    - get: r-salt-formulas-testing-dev
+      trigger: True
+      params:
+        fetch:
+          - release
+    - put: r-salt-formulas-testing-dev
+      params:
+        merge_to:
+          - branch: release
+            ff_only: True
+        repository: r-salt-formulas-testing-dev
+      on_failure:
+        put: send-email
+        params:
+          subject_text: "Build failed: ${BUILD_PIPELINE_NAME}/${BUILD_JOB_NAME}/${BUILD_NAME}"
+          body_text: "Failed task: ${ATC_EXTERNAL_URL}/teams/main/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}"

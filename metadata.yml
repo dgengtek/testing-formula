@@ -1,0 +1,3 @@
+name: "testing"
+version: "2018.8"
+goss_download_url: "https://github.com/aelsabbahy/goss/releases/download/v0.3.6/goss-linux-amd64"

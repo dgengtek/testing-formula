@@ -1,0 +1,7 @@
+# vim: ft=yaml
+test: "ok"
+service:
+  name: testing
+
+packages: 
+  - testing

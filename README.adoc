@@ -1,0 +1,18 @@
+= Salt formula for testing
+
+== Tests
+=== Requirements
+* kitchen-salt (0.2.3)
+
+==== Driver lxd
+Dependencies:
+* kitchen-lxd_sling (0.5.5)
+
+Requires prepared image with
+* sudo installed
+* user kitchen
+* sudo nopasswd for kitchen user
+* use ansible playbook to setup lxd image from ansible-playbook-etc
+
+==== Driver docker
+* kitchen-docker (2.6.0)

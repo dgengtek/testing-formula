@@ -1,0 +1,2 @@
+testing:
+  enabled: true

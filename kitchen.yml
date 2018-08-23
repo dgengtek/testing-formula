@@ -1,0 +1,57 @@
+---
+driver:
+  name: lxd
+  username: root
+  alias: kitchen/centos/7
+  image_server:
+    protocol: lxd
+  profiles:
+    - default
+  http_proxy: <%= ENV['http_proxy'] || "http://proxy:3128" %>
+  https_proxy: <%= ENV['https_proxy'] || "http://proxy:3128" %>
+transport: lxd
+
+platforms:
+  - name: <%=ENV['PLATFORM'] ||  'kitchen/centos/7' %>
+
+provisioner:
+  name: salt_solo
+  salt_install: yum
+  salt_version: 2018.3.2
+  http_proxy: <%= ENV['http_proxy'] || "http://proxy:3128" %>
+  https_proxy: <%= ENV['https_proxy'] || "http://proxy:3128" %>
+  require_chef: false
+  salt_copy_filter:
+    - .git
+  salt_minion_extra_config:
+    proxy_host: proxy
+    proxy_port: 3128
+    backend: tornado
+  formula: testing
+  log_level: error
+  state_top:
+    base:
+      "*":
+        - testing
+  pillars:
+    top.sls:
+      base:
+        "*":
+          - testing
+
+  grains:
+    noservices: False
+
+verifier:
+  goss_version: "v0.3.6"
+  name: goss
+
+suites:
+  - name: testing-formula
+    driver:
+      hostname: testing-default.ci.local
+    provisioner:
+      pillars_from_files:
+        testing.sls: test/pillar/default.sls
+
+# vim: ft=yaml sw=2 ts=2 sts=2 tw=0

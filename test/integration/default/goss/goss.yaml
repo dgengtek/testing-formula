@@ -1,0 +1,15 @@
+package:
+  openssh-server:
+    installed: true
+    versions:
+    - 7.4p1
+  tmux:
+    installed: true
+port:
+  tcp:22:
+    listening: true
+    ip: []
+service:
+  sshd:
+    enabled: true
+    running: False

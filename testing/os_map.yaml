@@ -1,0 +1,5 @@
+# vim: ft=yaml
+Arch: {}
+"Arch ARM": {}
+Ubuntu: {}
+CentOS: {}
