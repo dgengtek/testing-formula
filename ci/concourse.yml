@@ -34,6 +34,7 @@ resources:
       port: "587" # this must be a string
       username: ((r-email.username))
       password: ((r-email.password))
+      host_origin: smtp.intranet.dgeng.eu
     from: concourse-build@ci.local
     to: 
       - build@ci.local

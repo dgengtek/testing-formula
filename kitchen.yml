@@ -2,24 +2,24 @@
 driver:
   name: lxd
   username: root
-  alias: kitchen/centos/7
+  alias: kitchen/debian/9
   image_server:
     protocol: lxd
   profiles:
     - default
-  http_proxy: <%= ENV['http_proxy'] || "http://proxy:3128" %>
-  https_proxy: <%= ENV['https_proxy'] || "http://proxy:3128" %>
+  http_proxy: http://proxy:3128
+  https_proxy: http://proxy:3128
 transport: lxd
 
 platforms:
-  - name: <%=ENV['PLATFORM'] ||  'kitchen/centos/7' %>
+  - name: kitchen/debian/9
 
 provisioner:
   name: salt_solo
   salt_install: yum
   salt_version: 2018.3.2
-  http_proxy: <%= ENV['http_proxy'] || "http://proxy:3128" %>
-  https_proxy: <%= ENV['https_proxy'] || "http://proxy:3128" %>
+  http_proxy: http://proxy:3128
+  https_proxy: http://proxy:3128
   require_chef: false
   salt_copy_filter:
     - .git
